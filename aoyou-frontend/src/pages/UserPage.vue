@@ -40,7 +40,7 @@ const toEdit=(editKey: string,editName:string,currentValue: string) => {
 
 onMounted(async ()=>{
     user.value=await getCurrentUser();
-    user.value.tags=JSON.parse(user.value.tags);
+    user.value.tags=await JSON.parse(user.value.tags);
 })
 </script>
 

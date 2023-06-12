@@ -74,7 +74,12 @@ watchEffect(()=>{
 </script>
 
 <template>
-    <van-cell center title="标题">
+    <van-notice-bar mode="closeable"
+     left-icon="volume-o"
+     text="欢迎来到遨游，点击下方按钮可匹配与你兴趣最相关的用户~"
+    />
+
+    <van-cell center title="心动匹配模式">
         <template #right-icon>
             <van-switch v-model="idMatchMode" />
         </template>

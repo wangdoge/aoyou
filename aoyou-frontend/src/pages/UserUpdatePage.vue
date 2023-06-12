@@ -38,8 +38,9 @@ const toEdit=(editKey: string,editName:string,currentValue: string) => {
     })
 }
 
-const onsubmit=()=>{
-    const res=myAxios.post("/user/logout");
+const onsubmit=async ()=>{
+    const res=await myAxios.post("/user/logout");
+    console.log(res);
     if(res.code===0){
         showSuccessToast("退出成功");
         router.push("/user/login");
