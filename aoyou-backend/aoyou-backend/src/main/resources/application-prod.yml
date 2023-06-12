@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: user-center
+  datasource:
+    druid:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://101.35.233.178:3306/aoyou?serverTimeZone=Asia/ShangHai
+      username: wyf1
+      password: 123456
+  redis:
+    host: 101.35.233.178
+    port: 6379
+    database: 0
+
+server:
+  address: 0.0.0.0
+  servlet:
+    context-path: /api
+    session:
+      cookie:
+        domain: xmmxff.com
+        secure: true
+        same-site: none
