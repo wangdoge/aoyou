@@ -35,8 +35,8 @@ create table tag
 )
     comment '标签';
 
--- create index idx_userId
---     on tag (userId);
+create index idx_userId
+    on tag (userId);
 
 -- //关联查询创建人用户信息
 --         //select * from team t left join user u on t.userid =u.id
