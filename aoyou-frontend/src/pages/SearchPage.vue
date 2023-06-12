@@ -21,15 +21,15 @@ const tagList = [
             { text: '女', id: '女' },
         ],
     },
-    {
-        text: '江苏',
-        children: [
-            { text: '南京', id: 4 },
-            { text: '无锡', id: 5 },
-            { text: '徐州', id: 6 },
-        ],
-    },
-    { text: '福建', disabled: true },
+    // {
+    //     text: '江苏',
+    //     children: [
+    //         { text: '南京', id: 4 },
+    //         { text: '无锡', id: 5 },
+    //         { text: '徐州', id: 6 },
+    //     ],
+    // },
+    // { text: '福建', disabled: true },
 ];
 
 const close=(tag)=>{
@@ -67,7 +67,7 @@ const doSearchResult= ()=>{
         :items="tagList"
     />
     <div style="padding: 20px">
-        <van-button type="primary" size="large" round=true  @click="doSearchResult" style=" padding: 20px">大号按钮</van-button>
+        <van-button type="primary" size="large" round=true  @click="doSearchResult" style=" padding: 20px">提交</van-button>
     </div>
 
 
