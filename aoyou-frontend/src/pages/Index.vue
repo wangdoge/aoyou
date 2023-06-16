@@ -39,30 +39,30 @@ const loadData= async () =>{
             userList.value=userListData;
         }
     }else {
-        const userListData  =await myAxios.get('/user/recommend', {
-            params: {
-                pageNum:1,
-                pageSize:8
-            },
-            paramsSerializer: params => {
-                return qs.stringify(params,{indices:false})
-            }
-        })
-            .then(function (response) {
-                console.log(response);
-                return response.data.records;
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-        if(userListData){
-            userListData.forEach(user=>{
-                if(user.tags){
-                    user.tags=JSON.parse(user.tags);
-                }
-            })
-            userList.value=userListData;
-        }
+        // const userListData  =await myAxios.get('/user/recommend', {
+        //     params: {
+        //         pageNum:1,
+        //         pageSize:8
+        //     },
+        //     paramsSerializer: params => {
+        //         return qs.stringify(params,{indices:false})
+        //     }
+        // })
+        //     .then(function (response) {
+        //         console.log(response);
+        //         return response.data.records;
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //     })
+        // if(userListData){
+        //     userListData.forEach(user=>{
+        //         if(user.tags){
+        //             user.tags=JSON.parse(user.tags);
+        //         }
+        //     })
+        //     userList.value=userListData;
+        // }
     }
     loading.value=false;
 }
@@ -70,6 +70,48 @@ const loadData= async () =>{
 watchEffect(()=>{
     loadData();
 })
+
+const list = ref([]);
+const loadingBoolean = ref(false);
+const finished = ref(false);
+let pageNum=0 ;
+
+const onLoad = async () => {
+    pageNum=pageNum+1;
+    console.log(pageNum)
+    const userListData  =await myAxios.get('/user/recommend', {
+        params: {
+            pageNum:pageNum,
+            pageSize:8
+        },
+        paramsSerializer: params => {
+            return qs.stringify(params,{indices:false})
+        }
+    })
+        .then(function (response) {
+
+            console.log(response);
+            return response.data.records;
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+    if(userListData){
+        userListData.forEach(user=>{
+            if(user.tags){
+                user.tags=JSON.parse(user.tags);
+            }
+        })
+        if(pageNum===1){
+            userList.value=userListData;
+        }else {
+            userList.value=userList.value.concat(userListData);
+        }
+
+        console.log(userList)
+    }
+    loadingBoolean.value=false;
+};
 
 </script>
 
@@ -84,8 +126,17 @@ watchEffect(()=>{
             <van-switch v-model="idMatchMode" />
         </template>
     </van-cell>
-    <user-card-list :user-list="userList" :loading="loading"></user-card-list>
 
+    <van-list
+        v-model:loading="loadingBoolean"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+        offset="300"
+    >
+        <user-card-list :user-list="userList" :loading="loading"></user-card-list>
+
+    </van-list>
 
     <van-empty image="search" description="数据为空"  v-if="userList.length<1||!userList"/>
 </template>

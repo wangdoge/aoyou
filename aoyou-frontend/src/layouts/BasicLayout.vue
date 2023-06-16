@@ -1,5 +1,6 @@
 <template>
     <van-nav-bar
+        v-show="show===true"
             :title=title
             left-text=""
             left-arrow
@@ -14,7 +15,7 @@
     </div>
 
 
-    <van-tabbar v-model="active" @change="onChange">
+    <van-tabbar v-model="active" @change="onChange"  v-show="show===true">
         <van-tabbar-item to="/" icon="home-o" name="index">主页</van-tabbar-item>
         <van-tabbar-item to="/team" icon="search" name="team">队伍</van-tabbar-item>
         <van-tabbar-item to="/user" icon="friends-o" name="user">个人</van-tabbar-item>
@@ -36,13 +37,21 @@ const router=useRouter();
 const route=useRoute();
 const DEFAULT_TITLE='遨游';
 
+const show=ref(true);
+
+
+
 router.beforeEach((to,from)=>{
 
     const toPath=to.path;
+
     const route= routes.find((route)=>{
         return toPath == route.path
     })
-    console.log(route);
+
+    if(route.title==='登录遨游'){
+        show.value=false;
+    }
     if(!route?.title){
         title.value= DEFAULT_TITLE;
     }else {
