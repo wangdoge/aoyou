@@ -6,6 +6,7 @@ import java.util.concurrent.*;
 import com.usercenter.mapper.UserMapper;
 import com.usercenter.model.domain.User;
 import com.usercenter.service.UserService;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
 

@@ -92,7 +92,7 @@ public class UserController {
         User loginUser = userService.getLoginUser(request);
         ValueOperations<String, Object> opsForValue = redisTemplate.opsForValue();
         //如果有缓存,直接查缓存
-        String redisKey=String.format("aoyou:user:recommend:%s",loginUser.getId());
+        String redisKey=String.format("aoyou:user:recommend:%s:%s",loginUser.getId(),pageNum);
         Page<User> userPage = (Page<User>)opsForValue.get(redisKey);
         if(userPage!=null){
             return ResultUtils.success(userPage);
