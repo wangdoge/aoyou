@@ -101,7 +101,7 @@ const onSubmit = async () => {
     if(res?.code===0){
         showSuccessToast('添加成功');
         router.push({
-            path:'team',
+            path:'/team',
             replace:true,
         });
     }else {

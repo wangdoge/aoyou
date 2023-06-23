@@ -13,14 +13,14 @@ import {
     Search,
     Tabbar,
     TabbarItem, TimePicker,
-    Toast
+    Toast,
+
 } from "vant";
 import 'vant/es/toast/style';
 import * as VueRouter from "vue-router";
 import routes from "./config/route.ts";
 import 'vant/lib/index.css';
 import '../global.css'
-
 const app=createApp(App);
 app.use(Button);
 app.use(NavBar);

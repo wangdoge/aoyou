@@ -39,30 +39,7 @@ const loadData= async () =>{
             userList.value=userListData;
         }
     }else {
-        // const userListData  =await myAxios.get('/user/recommend', {
-        //     params: {
-        //         pageNum:1,
-        //         pageSize:8
-        //     },
-        //     paramsSerializer: params => {
-        //         return qs.stringify(params,{indices:false})
-        //     }
-        // })
-        //     .then(function (response) {
-        //         console.log(response);
-        //         return response.data.records;
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     })
-        // if(userListData){
-        //     userListData.forEach(user=>{
-        //         if(user.tags){
-        //             user.tags=JSON.parse(user.tags);
-        //         }
-        //     })
-        //     userList.value=userListData;
-        // }
+
     }
     loading.value=false;
 }

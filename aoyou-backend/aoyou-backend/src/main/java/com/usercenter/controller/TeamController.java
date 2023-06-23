@@ -13,6 +13,7 @@ import com.usercenter.model.domain.User;
 import com.usercenter.model.dto.TeamQuery;
 import com.usercenter.model.request.*;
 import com.usercenter.model.vo.TeamNameVO;
+import com.usercenter.model.vo.TeamVO;
 import com.usercenter.model.vo.UserVO;
 import com.usercenter.service.TeamNameService;
 import com.usercenter.service.TeamService;
@@ -87,11 +88,11 @@ public class TeamController {
     }
 
     @GetMapping("/get")
-    public BaseResponse<Team> getTeamById(long id){
+    public BaseResponse<TeamVO> getTeamById(long id,HttpServletRequest request){
         if(id<=0){
             throw new BusinessException(ErrorCode.PARAM_ERROR);
         }
-        Team team = teamService.getById(id);
+        TeamVO team = teamService.getTeamById(id,request);
         if(team==null){
             throw new BusinessException(ErrorCode.PARAM_NULL_ERROR);
         }
@@ -128,7 +129,6 @@ public class TeamController {
         userTeamJoinQueryWrapper.in(TeamName::getTeamId,teamIdList);
         List<TeamName> teamUserList = teamNameService.list(userTeamJoinQueryWrapper);
         Map<Long, List<TeamName>> teamIdUserList = teamUserList.stream().collect(Collectors.groupingBy(TeamName::getTeamId));
-
 
         teamList.forEach(team->{
             team.setHasJoinNum(teamIdUserList.get(team.getId()).size());
@@ -236,4 +236,6 @@ public class TeamController {
         return ResultUtils.success(list);
 
     }
+
+
 }

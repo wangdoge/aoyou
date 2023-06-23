@@ -11,10 +11,10 @@ import java.io.Serializable;
  */
 
 @Data
-public class UserLoginRequest implements Serializable{
+public class UserLoginByPhoneRequest implements Serializable{
 
     private static final long serialVersionUID=1L;
 
     private String userAccount;
-    private String password;
+    private String code;
 }

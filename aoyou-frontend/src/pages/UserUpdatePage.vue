@@ -43,7 +43,7 @@ const onsubmit=async ()=>{
     console.log(res);
     if(res.code===0){
         showSuccessToast("退出成功");
-        router.push("/user/login");
+        router.push("/user/login/phone");
     }
 }
 </script>

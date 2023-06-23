@@ -8,6 +8,7 @@
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="description" column="description" jdbcType="VARCHAR"/>
+            <result property="teamAvatar" column="teamAvatar" jdbcType="VARCHAR"/>
             <result property="maxNum" column="maxNum" jdbcType="INTEGER"/>
             <result property="expireTime" column="expireTime" jdbcType="TIMESTAMP"/>
             <result property="userId" column="userId" jdbcType="BIGINT"/>
@@ -19,7 +20,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,name,description,
+        id,name,description,teamAvatar
         maxNum,expireTime,userId,
         status,password,createTime,
         updateTime,isDelete

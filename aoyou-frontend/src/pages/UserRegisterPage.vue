@@ -30,7 +30,7 @@
       if(res.data&&res.code===0){
           showSuccessToast('注册成功')
           router.push({
-              path:'/user/login',
+              path:'/user/login/phone',
               query:{
                   userAccount:userAccount.value,
                   password:password.value

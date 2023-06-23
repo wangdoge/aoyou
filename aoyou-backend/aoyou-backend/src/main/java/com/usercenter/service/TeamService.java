@@ -9,7 +9,9 @@ import com.usercenter.model.request.TeamJoinRequest;
 import com.usercenter.model.request.TeamQuitRequest;
 import com.usercenter.model.request.TeamUpdateRequest;
 import com.usercenter.model.vo.TeamNameVO;
+import com.usercenter.model.vo.TeamVO;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -65,4 +67,11 @@ public interface TeamService extends IService<Team> {
      * @return
      */
     boolean deleteTeam(TeamDeleteRequest teamDeleteRequest,User loginUser);
+
+    /**
+     * 根据id获取队伍信息
+     * @param id
+     * @return
+     */
+   TeamVO getTeamById(long id, HttpServletRequest request);
 }

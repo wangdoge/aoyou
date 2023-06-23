@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.usercenter.common.ErrorCode;
+import com.usercenter.common.ResultUtils;
 import com.usercenter.exception.BusinessException;
 import com.usercenter.model.domain.User;
 import com.usercenter.model.request.UserAddRequest;
@@ -57,7 +58,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private static final String SALT="wang";
 
     @Override
-    public long userRegister(String userAccount, String userPassword, String checkPassword,String username,String planetCode) {
+    public long userRegister(String userAccount, String userPassword, String checkPassword,String username,String planetCode,Boolean autoLogin,HttpServletRequest request) {
 
         //1.校验
         //校验非空
@@ -112,15 +113,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setUserPassword(encryptPassword);
         user.setUsername(username);
         user.setPlanetCode(planetCode);
+        user.setUserRole(0);
         boolean saveResult = this.save(user);
         if(!saveResult){
             return -1;
         }
+
+        if(autoLogin){
+            //3.用户脱敏,隐藏返回给前端的敏感信息
+            User safetyUser=getSafeUser(user);
+
+            //4.记录用户的登录态
+            request.getSession().setAttribute(USER_LOGIN_STATE,safetyUser);
+        }
+
         return user.getId();
     }
 
     @Override
-    public User userLogin(String userAccount, String userPassword, HttpServletRequest request) {
+    public User userLoginByPwd(String userAccount, String userPassword, HttpServletRequest request) {
         //1.校验
         //校验非空
         if(StringUtils.isAnyBlank(userAccount,userPassword)){
@@ -171,6 +182,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         request.getSession().setAttribute(USER_LOGIN_STATE,safetyUser);
 
 
+        return safetyUser;
+    }
+
+    @Override
+    public User userLoginByPhone(String userAccount, String code, HttpServletRequest request) {
+        //手机号不小于4位
+        if(userAccount.length()<11){
+            throw new BusinessException(ErrorCode.PARAM_ERROR,"手机号不得小于11位");
+        }
+        if(code.length()!=6){
+            throw new BusinessException(ErrorCode.PARAM_ERROR,"验证码应为6位");
+        }
+        String redisKey = String.format("aoyou:user:smsCode:%s", userAccount);
+        ValueOperations<String, Object> opsForValue = redisTemplate.opsForValue();
+        String  judgeCode = (String)opsForValue.get(redisKey);
+        if(judgeCode==null){
+            throw new BusinessException(ErrorCode.PARAM_ERROR,"验证码好像过期了捏");
+        }
+        if(!judgeCode.equals(code)){
+            throw new BusinessException(ErrorCode.PARAM_ERROR,"验证码错误");
+        }
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUserAccount,userAccount);
+        User user = userMapper.selectOne(queryWrapper);
+
+        //用户脱敏,隐藏返回给前端的敏感信息
+        User safetyUser=getSafeUser(user);
+        //记录用户的登录态
+        request.getSession().setAttribute(USER_LOGIN_STATE,safetyUser);
         return safetyUser;
     }
 
@@ -404,6 +444,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             }.getType());
             //计算分数
             System.out.println(tagList+" "+userTagList);
+            if(tagList==null){
+                throw new BusinessException(ErrorCode.PARAM_ERROR,"您还没有标签哦~先去选择您的标签吧");
+            }
             long distance = AlgorithmUtils.minDistance(tagList, userTagList);
             list.add(new Pair<>(user,distance));
         }

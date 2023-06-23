@@ -19,6 +19,8 @@ import UserTeamCreatePage from "../pages/UserTeamCreatePage.vue";
 import UserTeamJoinPage from "../pages/UserTeamJoinPage.vue";
 import UserRegisterPage from "../pages/UserRegisterPage.vue";
 import TeamInfoPage from "../pages/TeamInfoPage.vue";
+import UserPasswordLoginPage from "../pages/UserPasswordLoginPage.vue";
+import UserFirstLoginPage from "../pages/UserFirstLoginPage.vue";
 
 
 // =定义一些路由
@@ -29,14 +31,16 @@ const routes = [
     { path: '/team', title:'队伍大厅', component: TeamPage },
     { path: '/team/update', title:'队伍信息', component: TeamUpdatePage },
     { path: '/user', title:'个人中心', component: UserPage },
-    { path: '/user/register', title:'队伍注册',component: UserRegisterPage},
+    { path: '/user/register', title:'用户注册',component: UserRegisterPage},
+    { path: '/user/firstRegister', title:'首次登录',component: UserFirstLoginPage},
     { path: '/user/edit', title:'编辑信息', component: UserEditPage },
     { path: '/user/list', component: SearchResultPage},
     { path: '/user/update', title:'个人信息', component: UserUpdatePage},
     { path: '/search',title:'用户搜索',component: SearchPage},
-    { path: '/user/login',title:'登录遨游',component: UserLoginPage},
+    { path: '/user/login/phone',title:'登录遨游',component: UserLoginPage},
+    { path: '/user/login/password',title:'登录遨游',component: UserPasswordLoginPage},
     { path: '/team/add', title:'创建队伍',component: TeamAddPage},
-    { path: '/team/info', title:'创建队伍',component: TeamInfoPage},
+    { path: '/team/info', title:'队伍信息',component: TeamInfoPage},
     { path: '/user/team/join', title:'我加入的队伍',component: UserTeamJoinPage},
     { path: '/user/team/create', title:'我的队伍',component: UserTeamCreatePage},
 

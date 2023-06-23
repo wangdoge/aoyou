@@ -16,6 +16,7 @@ import com.usercenter.model.request.TeamJoinRequest;
 import com.usercenter.model.request.TeamQuitRequest;
 import com.usercenter.model.request.TeamUpdateRequest;
 import com.usercenter.model.vo.TeamNameVO;
+import com.usercenter.model.vo.TeamVO;
 import com.usercenter.model.vo.UserVO;
 import com.usercenter.service.TeamNameService;
 import com.usercenter.service.TeamService;
@@ -31,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -377,6 +379,45 @@ public class TeamServiceImpl extends ServiceImpl<TeamMapper, Team>
             throw new BusinessException(ErrorCode.PARAM_ERROR);
         }
         return this.removeById(teamId);
+    }
+
+    /**
+     * 根据id获取队伍信息
+     * @param id 队伍id
+     * @return
+     */
+    @Override
+    public TeamVO getTeamById(long id, HttpServletRequest request) {
+        Team team = this.getTeam(id);
+        TeamVO teamInfo = new TeamVO();
+        BeanUtils.copyProperties(team,teamInfo);
+
+        //获取当前登录用户
+        User loginUser = userService.getLoginUser(request);
+        Long loginUserId = loginUser.getId();
+
+        LambdaQueryWrapper<TeamName> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(TeamName::getTeamId,id);
+        //关系列表
+        List<TeamName> listUser = teamNameService.list(queryWrapper);
+        List<UserVO> users = new ArrayList<>();
+
+        //循环读取user并放入User集合
+        listUser.forEach(userTeam->{
+            UserVO userVO = new UserVO();
+            Long userId = userTeam.getUserId();
+            User user = userService.getById(userId);
+            if(user.getId().equals(loginUserId)){
+                teamInfo.setHasJoin(true);
+            }
+            BeanUtils.copyProperties(user,userVO);
+            users.add(userVO);
+        });
+
+        teamInfo.setUserCount(users.size());
+        teamInfo.setUserList(users);
+
+        return teamInfo;
     }
 
     /**

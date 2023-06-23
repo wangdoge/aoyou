@@ -27,7 +27,7 @@ myAxios.interceptors.response.use(function (response) {
         if(response.data.code===40100){
             const redirectUrl=window.location.href;
             showFailToast('请先登录');
-            window.location.href=`/user/login?redirect=${redirectUrl}`;
+            window.location.href=`/user/login/phone?redirect=${redirectUrl}`;
         }
         showFailToast(response.data.description!=''?response.data.description:response.data.message);
     }

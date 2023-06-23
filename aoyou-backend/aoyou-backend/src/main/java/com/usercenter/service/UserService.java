@@ -4,7 +4,6 @@ import com.usercenter.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.usercenter.model.request.UserAddRequest;
 import com.usercenter.model.request.UserModifyPasswordRequest;
-import com.usercenter.model.vo.UserVO;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -25,15 +24,25 @@ public interface UserService extends IService<User> {
      * @param checkPassword 校验密码
      * @return 新用户的id
      */
-    long userRegister(String userAccount,String userPassword,String checkPassword,String username,String planetCode);
+    long userRegister(String userAccount,String userPassword,String checkPassword,String username,String planetCode,Boolean autoLogin,HttpServletRequest request);
 
     /**
-     *
+     * 用户登录
      * @param userAccount 账号
      * @param userPassword 密码
      * @return 用户信息
      */
-    User userLogin(String userAccount, String userPassword, HttpServletRequest request);
+    User userLoginByPwd(String userAccount, String userPassword, HttpServletRequest request);
+
+
+    /**
+     * 用户登录（手机验证码）
+     * @param userAccount
+     * @param code
+     * @param request
+     * @return
+     */
+    User userLoginByPhone(String userAccount, String code, HttpServletRequest request);
 
     /**
      * 用户脱敏

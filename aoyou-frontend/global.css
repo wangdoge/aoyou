@@ -5,3 +5,27 @@
     border-radius: 50%;
     height: 47px;
 }
+.quit-button{
+    position: fixed;
+    right: 147.60px;
+    bottom: 43px;
+    border-radius: 50%;
+    height: 72px;
+    width: 72px;
+}
+.update-button{
+    position: fixed;
+    right: 255.2px;
+    bottom: 43px;
+    border-radius: 50%;
+    height: 72px;
+    width: 72px;
+}
+.delete-button{
+    position: fixed;
+    right: 40px;
+    bottom: 43px;
+    border-radius: 50%;
+    height: 72px;
+    width: 72px;
+}

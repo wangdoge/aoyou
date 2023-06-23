@@ -10,7 +10,6 @@ import com.usercenter.common.ResultUtils;
 import com.usercenter.exception.BusinessException;
 import com.usercenter.model.domain.User;
 import com.usercenter.model.request.*;
-import com.usercenter.model.vo.UserVO;
 import com.usercenter.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -45,9 +44,8 @@ public class UserController {
     private RedisTemplate<String,Object> redisTemplate;
 
     @PostMapping("/register")
-    public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest){
+    public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest,HttpServletRequest request){
         if(userRegisterRequest==null){
-
 //            return ResultUtils.error(ErrorCode.PARAM_ERROR);
             throw new BusinessException(ErrorCode.PARAM_ERROR);
         }
@@ -56,15 +54,16 @@ public class UserController {
         String password = userRegisterRequest.getPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
         String planetCode = userRegisterRequest.getPlanetCode();
+        Boolean autoLogin = userRegisterRequest.getAutoLogin();
         if(StringUtils.isAnyBlank(userAccount,password,checkPassword)){
             return null;
         }
-        Long result = userService.userRegister(userAccount, password, checkPassword, username, planetCode);
+        Long result = userService.userRegister(userAccount, password, checkPassword, username, planetCode,autoLogin,request);
         return ResultUtils.success(result);
     }
 
     @PostMapping("/logout")
-    public BaseResponse<Integer> userLogin(HttpServletRequest request){
+    public BaseResponse<Integer> userLogout(HttpServletRequest request){
         if(request==null){
             return null;
         }
@@ -73,16 +72,32 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public BaseResponse<User> userLogout(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request){
-        if(userLoginRequest==null){
+    public BaseResponse<User> userLoginByPwd(@RequestBody UserLoginByPwdRequest userLoginByPwdRequest, HttpServletRequest request){
+        if(userLoginByPwdRequest ==null){
             return null;
         }
-        String userAccount = userLoginRequest.getUserAccount();
-        String password = userLoginRequest.getPassword();
+        String userAccount = userLoginByPwdRequest.getUserAccount();
+        String password = userLoginByPwdRequest.getPassword();
         if(StringUtils.isAnyBlank(userAccount,password)){
             return null;
         }
-        User user = userService.userLogin(userAccount, password, request);
+        User user = userService.userLoginByPwd(userAccount, password, request);
+        User safeUser = userService.getSafeUser(user);
+        return ResultUtils.success(safeUser);
+    }
+
+    @PostMapping("/login/phone")
+    public BaseResponse<User> userLoginByPhone(@RequestBody UserLoginByPhoneRequest userLoginByPhoneRequest, HttpServletRequest request){
+        if(userLoginByPhoneRequest ==null){
+            return null;
+        }
+        String userAccount = userLoginByPhoneRequest.getUserAccount();
+        String code = userLoginByPhoneRequest.getCode();
+
+        if(StringUtils.isAnyBlank(userAccount,code)){
+            return null;
+        }
+        User user = userService.userLoginByPhone(userAccount, code, request);
         User safeUser = userService.getSafeUser(user);
         return ResultUtils.success(safeUser);
     }
