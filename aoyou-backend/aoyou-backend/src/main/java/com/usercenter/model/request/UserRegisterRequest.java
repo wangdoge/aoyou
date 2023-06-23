@@ -20,4 +20,5 @@ public class UserRegisterRequest implements Serializable{
     private String password;
     private String checkPassword;
     private String planetCode;
+    private Boolean AutoLogin=false;
 }
